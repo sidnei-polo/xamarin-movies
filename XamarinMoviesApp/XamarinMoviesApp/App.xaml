@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="XamarinMoviesApp.App">
+	<Application.Resources>
+		<ResourceDictionary>
+            <!-- App colors -->
+            <Color x:Key="Primary">#091C24</Color>
+            <Color x:Key="PrimaryDark">#212121</Color>
+            <Color x:Key="Accent">#21D177</Color>
+            <Color x:Key="BackgroundColor">#F4F4F4</Color>
+            <Color x:Key="PosterBackgroundColor">#E6E7E7</Color>
+            <Color x:Key="BackdropBackgroundColor">#CFCFCF</Color>
+
+            <!-- Text colors -->
+            <Color x:Key="MediumGrayTextColor">#4D4D4D</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+            <Color x:Key="LightGrayTextColor">#D3D2D2</Color>
+
+            <!-- Navigation style -->
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="BarTextColor" Value="White" />
+            </Style>
+
+            <!-- Text styles -->
+            <Style x:Key="labelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource MediumGrayTextColor}" />
+                <Setter Property="FontSize">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="iOS">16</On>
+                            <On Platform="Android">14</On>
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Label" BasedOn="{StaticResource labelStyle}" />
+            <Style x:Key="EmptyContentStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource LightGrayTextColor}" />
+                <Setter Property="FontSize">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="iOS">22</On>
+                            <On Platform="Android">20</On>
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ItemTitleStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource Primary}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="iOS">20</On>
+                            <On Platform="Android">18</On>
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+	</Application.Resources>
+</Application>

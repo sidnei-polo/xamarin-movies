@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:views="clr-namespace:XamarinMoviesApp.Views"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="XamarinMoviesApp.Pages.MoviesPage"
+    BackgroundColor="{StaticResource BackgroundColor}"
+    Title="Movies">
+    <StackLayout Spacing="0">
+        <SearchBar x:Name="searchBar"
+            AutomationId="Search"
+            FontSize="Small"
+            Placeholder="Search"
+            Text="{Binding Filter, Mode=TwoWay}">
+            <SearchBar.PlaceholderColor>
+                <OnPlatform x:TypeArguments="Color">
+                    <On Platform="Android">White</On>
+                </OnPlatform>
+            </SearchBar.PlaceholderColor>
+            <SearchBar.BackgroundColor>
+                <OnPlatform x:TypeArguments="Color">
+                    <On Platform="Android"
+                        Value="{StaticResource Primary}"/>
+                </OnPlatform>
+            </SearchBar.BackgroundColor>
+            <SearchBar.TextColor>
+                <OnPlatform x:TypeArguments="Color">
+                    <On Platform="Android">White</On>
+                </OnPlatform>
+            </SearchBar.TextColor>
+            <SearchBar.CancelButtonColor>
+                <OnPlatform x:TypeArguments="Color">
+                    <On Platform="Android">White</On>
+                    <On Platform="iOS"
+                        Value="{StaticResource Primary}"/>
+                </OnPlatform>
+            </SearchBar.CancelButtonColor>
+        </SearchBar>
+        <Grid VerticalOptions="FillAndExpand">
+            <views:InfiniteListView Footer="{Binding .}"
+                HasUnevenRows="true"
+                ItemsSource="{Binding Movies}"
+                LoadMoreCommand="{Binding LoadMoreCommand}"
+                SelectedItem="{Binding SelectedMovie, Mode=TwoWay}"
+                SeparatorVisibility="None">
+                <views:InfiniteListView>
+                    <x:Arguments>
+                        <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+                    </x:Arguments>
+                </views:InfiniteListView>
+                <ListView.Triggers>
+                    <DataTrigger Binding="{Binding NoMoviesFound}"
+                        TargetType="ListView"
+                        Value="true">
+                        <Setter Property="IsVisible"
+                            Value="false"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsBusy}"
+                        TargetType="ListView"
+                        Value="true">
+                        <Setter Property="IsVisible"
+                            Value="false"/>
+                    </DataTrigger>
+                </ListView.Triggers>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid AutomationId="MovieItem"
+                                ColumnSpacing="16"
+                                Padding="8,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentView BackgroundColor="{StaticResource PosterBackgroundColor}">
+                                    <Label HorizontalOptions="Center"
+                                        Text="Image"
+                                        VerticalOptions="Center"/>
+                                </ContentView>
+                                <Image x:Name="image"
+                                    Aspect="AspectFill"
+                                    Grid.Column="0"
+                                    HeightRequest="132"
+                                    Source="{Binding PosterImage}"
+                                    WidthRequest="92">
+                                    </Image>
+                                <ActivityIndicator BindingContext="{x:Reference image}"
+                                    Grid.Column="0"
+                                    HorizontalOptions="Center"
+                                    IsRunning="{Binding IsLoading}"
+                                    IsVisible="{Binding IsLoading}"
+                                    VerticalOptions="Center"/>
+                                <StackLayout Grid.Column="1"
+                                    VerticalOptions="Center">
+                                    <Label LineBreakMode="TailTruncation"
+                                        Style="{StaticResource ItemTitleStyle}"
+                                        Text="{Binding Title}"/>
+                                    <Label LineBreakMode="TailTruncation"
+                                        Text="{Binding Genres}"/>
+                                    <Label Text="{Binding ReleaseDate, StringFormat='{0:y}'}"/>
+                                </StackLayout>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout HorizontalOptions="Center"
+                        IsVisible="{Binding IsLoadingMore}"
+                        Padding="16">
+                        <StackLayout.Orientation>
+                            <OnPlatform x:TypeArguments="StackOrientation">
+                                <On Platform="iOS">Horizontal</On>
+                            </OnPlatform>
+                        </StackLayout.Orientation>
+                        <ActivityIndicator IsRunning="{Binding IsLoadingMore}"/>
+                        <Label HorizontalOptions="Center"
+                            Text="Loading More..."/>
+                        <StackLayout.Triggers>
+                            <Trigger Property="IsVisible"
+                                TargetType="StackLayout"
+                                Value="False">
+                                <Setter Property="HeightRequest"
+                                    Value="0"/>
+                            </Trigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+                </ListView.Footer>
+            </views:InfiniteListView>
+            <StackLayout HorizontalOptions="Center"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center">
+                <StackLayout.Orientation>
+                    <OnPlatform x:TypeArguments="StackOrientation">
+                        <On Platform="iOS">Horizontal</On>
+                    </OnPlatform>
+                </StackLayout.Orientation>
+                <ActivityIndicator IsRunning="{Binding IsBusy}"/>
+                <Label HorizontalOptions="Center"
+                    Text="Loading Movies..."/>
+            </StackLayout>
+            <Label HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                IsVisible="{Binding NoMoviesFound}"
+                Margin="16"
+                Style="{StaticResource EmptyContentStyle}"
+                Text="No Movies Found"
+                VerticalOptions="Center"/>
+        </Grid>
+    </StackLayout>
+</ContentPage>

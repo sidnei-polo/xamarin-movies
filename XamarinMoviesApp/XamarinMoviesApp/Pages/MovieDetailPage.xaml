@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:views="clr-namespace:XamarinMoviesApp.Views"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="XamarinMoviesApp.Pages.MovieDetailPage"
+    Title="{Binding Title}">
+    <ScrollView>
+        <StackLayout>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="196"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="116"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ContentView BackgroundColor="{StaticResource BackdropBackgroundColor}"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="2">
+                    <Label HorizontalOptions="Center"
+                        Text="Image"
+                        VerticalOptions="Center"/>
+                </ContentView>
+                <Image Aspect="AspectFill"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="2"
+                    Source="{Binding BackdropImage}"/>
+                <ContentView BackgroundColor="{StaticResource PosterBackgroundColor}"
+                    Grid.Row="1"
+                    Grid.RowSpan="2"
+                    Margin="16,8">
+                    <Label HorizontalOptions="Center"
+                        Text="Image"
+                        VerticalOptions="Center"/>
+                </ContentView>
+                <Image Aspect="AspectFill"
+                    Grid.Row="1"
+                    Grid.RowSpan="2"
+                    Margin="16,8"
+                    Source="{Binding PosterImage}"
+                    WidthRequest="92"/>
+                <StackLayout Grid.Column="1"
+                    Grid.Row="2">
+                    <Label LineBreakMode="TailTruncation"
+                        Style="{StaticResource ItemTitleStyle}"
+                        Text="{Binding Title}"/>
+                    <Label LineBreakMode="TailTruncation"
+                        Text="{Binding VoteAverage, StringFormat='Vote average: {0:0.00}'}"/>
+                    <Label Text="{Binding ReleaseDate, StringFormat='{0:y}'}"/>
+                </StackLayout>
+            </Grid>
+            <views:SectionView Text="Overview"/>
+            <Label Margin="16,0"
+                Text="{Binding Overview}"/>
+            <views:SectionView Text="Genres"/>
+            <Label Margin="16,0,16,16"
+                Text="{Binding Genres}"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
