@@ -22,15 +22,15 @@ namespace XamarinMoviesApp.Views
 
         public InfiniteListView()
 		{
-			ItemAppearing += InfiniteListView_ItemAppearing;
+			ItemAppearing += HandleItemAppearing;
 		}
 
         public InfiniteListView (ListViewCachingStrategy strategy) : base(strategy)
         {
-            ItemAppearing += InfiniteListView_ItemAppearing;
+            ItemAppearing += HandleItemAppearing;
         }
 
-        void InfiniteListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        void HandleItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
 
             if (ItemsSource is IList items && e.Item == items[items.Count - 1])

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -8,12 +9,12 @@ namespace XamarinMoviesApp.ViewModels
 {
     public class MoviesViewModel : BaseViewModel
     {
-		private int _loadedPages;
+        private int _loadedPages;
 
-		private readonly IMoviesService _moviesService;
-		private readonly INavigationService _navigationService;
+        private readonly IMoviesService _moviesService;
+        private readonly INavigationService _navigationService;
 
-		public MoviesViewModel()
+        public MoviesViewModel()
         {
             _moviesService = DependencyService.Get<IMoviesService>();
             _navigationService = DependencyService.Get<INavigationService>();
@@ -40,53 +41,55 @@ namespace XamarinMoviesApp.ViewModels
         public MovieViewModel SelectedMovie
         {
             get { return _selectedMovie; }
-            set { 
+            set
+            {
                 SetPropertyChanged(ref _selectedMovie, value);
-				if (value != null)
-				{
-					SelectedMovie = null;
-					NavigateToMovieDetail(value);
-				}
+                if (value != null)
+                {
+                    SelectedMovie = null;
+                    NavigateToMovieDetail(value);
+                }
             }
         }
 
-		string filter = string.Empty;
+        string filter = string.Empty;
         public string Filter
-		{
-			get { return filter; }
-			set
-			{
-				if (SetPropertyChanged(ref filter, value))
-					ExecuteFilterMoviesAsync();
-			}
-		}
+        {
+            get { return filter; }
+            set
+            {
+                if (SetPropertyChanged(ref filter, value))
+                    ExecuteFilterMoviesAsync();
+            }
+        }
 
-		async Task ExecuteFilterMoviesAsync()
-		{
-			if (!string.IsNullOrEmpty(Filter))
-			{
-				var query = Filter;
-				await Task.Delay(500);
-				if (query != Filter)
-					return;
-			}
+        async Task ExecuteFilterMoviesAsync()
+        {
+            if (!string.IsNullOrEmpty(Filter))
+            {
+                var query = Filter;
+                await Task.Delay(500);
+                if (query != Filter)
+                    return;
+            }
 
             await LoadMoviesAsync(1, Filter);
-		}
+        }
 
         public async Task LoadMoviesAsync(int page, string query = null)
-		{
+        {
             NoMoviesFound = false;
 
-			if (page == 1)
-			{
-				Movies.Clear();
+            if (page == 1)
+            {
+                Movies.Clear();
                 IsBusy = true;
-			}
+            }
 
             var movies = await _moviesService.GetMoviesAsync(page, query);
 
-            if (movies == null) {
+            if (movies == null)
+            {
                 NoMoviesFound = true;
                 IsBusy = false;
                 return;
@@ -101,26 +104,33 @@ namespace XamarinMoviesApp.ViewModels
 
             _loadedPages = page;
             IsBusy = false;
-		}
+        }
 
         private async Task NavigateToMovieDetail(MovieViewModel movie)
-		{
+        {
             await _navigationService.NavigateToDetail(movie);
-		}
+        }
 
         private ICommand _loadMoreCommand;
-        public ICommand LoadMoreCommand => _loadMoreCommand ?? (_loadMoreCommand = new Command(async() => await ExecuteLoadMoreCommand(), CanExecuteLoadMoreCommand));
+        public ICommand LoadMoreCommand => _loadMoreCommand ?? (_loadMoreCommand = new Command(ExecuteLoadMoreCommand, CanExecuteLoadMoreCommand));
 
-		public bool CanExecuteLoadMoreCommand()
-		{
-            return !IsLoadingMore;
-		}
-
-		public async Task ExecuteLoadMoreCommand()
+        public bool CanExecuteLoadMoreCommand()
         {
-            IsLoadingMore = true;
-            await LoadMoviesAsync(_loadedPages + 1, Filter);
-            IsLoadingMore = false;
+            return !IsLoadingMore;
+        }
+
+        public async void ExecuteLoadMoreCommand()
+        {
+            try
+            {
+                IsLoadingMore = true;
+                await LoadMoviesAsync(_loadedPages + 1, Filter);
+                IsLoadingMore = false;
+            }
+            catch (Exception ex)
+            {
+                //TODO Report exception
+            }
         }
     }
 }

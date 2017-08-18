@@ -145,6 +145,11 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_search_white_24dp.png" />
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\splash_screen.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\splash_screen.9.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\splash_screen.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\splash_screen.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\splash_screen.9.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Renderers\" />

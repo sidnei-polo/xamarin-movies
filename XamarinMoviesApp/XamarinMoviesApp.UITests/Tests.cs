@@ -1,5 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Xamarin.UITest;
+using Xamarin.UITest.Queries;
 using XamarinMoviesApp.UITests.Pages;
 
 namespace XamarinMoviesApp.UITests
@@ -8,39 +10,32 @@ namespace XamarinMoviesApp.UITests
     [TestFixture(Platform.iOS)]
     public class Tests
     {
-        IApp app;
-        Platform platform;
+        IApp _app;
+        Platform _platform;
 
         public Tests(Platform platform)
         {
-            this.platform = platform;
+            _platform = platform;
         }
 
 		[SetUp]
 		public void BeforeEachTest()
 		{
-			app = AppInitializer.StartApp(platform);
+			_app = AppInitializer.StartApp(_platform);
 		}
-
-        [Test]
-        public void VisualizationTest()
-        {
-            new MoviesPage()
-                .SelectFirstMovie();
-
-            new MovieDetailPage()
-                .GoBack();
-        }
 
 		[Test]
 		public void SearchTest()
 		{
+            const string searchParam = "Star War";
+            const string movieTitle = "Star Wars";
+
             new MoviesPage()
-                .SearchMovie("Star Wars")
+                .SearchMovie(searchParam)
                 .SelectFirstMovie();
 
-			new MovieDetailPage()
-				.GoBack();
+            AppResult[] result = _app.Query(movieTitle);
+            Assert.IsTrue(result.Any(), "Movie Found");
 		}
     }
 }

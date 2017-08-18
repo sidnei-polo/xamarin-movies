@@ -7,9 +7,9 @@
     Title="Movies">
     <StackLayout Spacing="0">
         <SearchBar x:Name="searchBar"
+            AutomationId="Search"
             FontSize="Small"
             Placeholder="Search"
-            AutomationId="Search"
             Text="{Binding Filter, Mode=TwoWay}">
             <SearchBar.PlaceholderColor>
                 <OnPlatform x:TypeArguments="Color">
@@ -36,11 +36,17 @@
             </SearchBar.CancelButtonColor>
         </SearchBar>
         <Grid VerticalOptions="FillAndExpand">
-            <views:InfiniteListView HasUnevenRows="true"
+            <views:InfiniteListView Footer="{Binding .}"
+                HasUnevenRows="true"
                 ItemsSource="{Binding Movies}"
                 LoadMoreCommand="{Binding LoadMoreCommand}"
                 SelectedItem="{Binding SelectedMovie, Mode=TwoWay}"
                 SeparatorVisibility="None">
+                <views:InfiniteListView>
+                    <x:Arguments>
+                        <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+                    </x:Arguments>
+                </views:InfiniteListView>
                 <ListView.Triggers>
                     <DataTrigger Binding="{Binding NoMoviesFound}"
                         TargetType="ListView"
@@ -58,20 +64,24 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="8,4"
-                                AutomationId="MovieItem"
-                                ColumnSpacing="16">
+                            <Grid AutomationId="MovieItem"
+                                ColumnSpacing="16"
+                                Padding="8,4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
+                                <ContentView BackgroundColor="{StaticResource PosterBackgroundColor}">
+                                    <Label HorizontalOptions="Center"
+                                        Text="Image"
+                                        VerticalOptions="Center"/>
+                                </ContentView>
                                 <Image x:Name="image"
                                     Aspect="AspectFill"
-                                    HeightRequest="132"
-                                    WidthRequest="92"
-                                    BackgroundColor="#E6E7E7"
                                     Grid.Column="0"
-                                    Source="{Binding PosterImage}">
+                                    HeightRequest="132"
+                                    Source="{Binding PosterImage}"
+                                    WidthRequest="92">
                                     </Image>
                                 <ActivityIndicator BindingContext="{x:Reference image}"
                                     Grid.Column="0"
@@ -92,6 +102,28 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout HorizontalOptions="Center"
+                        IsVisible="{Binding IsLoadingMore}"
+                        Padding="16">
+                        <StackLayout.Orientation>
+                            <OnPlatform x:TypeArguments="StackOrientation">
+                                <On Platform="iOS">Horizontal</On>
+                            </OnPlatform>
+                        </StackLayout.Orientation>
+                        <ActivityIndicator IsRunning="{Binding IsLoadingMore}"/>
+                        <Label HorizontalOptions="Center"
+                            Text="Loading More..."/>
+                        <StackLayout.Triggers>
+                            <Trigger Property="IsVisible"
+                                TargetType="StackLayout"
+                                Value="False">
+                                <Setter Property="HeightRequest"
+                                    Value="0"/>
+                            </Trigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+                </ListView.Footer>
             </views:InfiniteListView>
             <StackLayout HorizontalOptions="Center"
                 IsVisible="{Binding IsBusy}"
@@ -113,17 +145,5 @@
                 Text="No Movies Found"
                 VerticalOptions="Center"/>
         </Grid>
-        <StackLayout HorizontalOptions="Center"
-            IsVisible="{Binding IsLoadingMore}"
-            Padding="16">
-            <StackLayout.Orientation>
-                <OnPlatform x:TypeArguments="StackOrientation">
-                    <On Platform="iOS">Horizontal</On>
-                </OnPlatform>
-            </StackLayout.Orientation>
-            <ActivityIndicator IsRunning="{Binding IsLoadingMore}"/>
-            <Label HorizontalOptions="Center"
-                Text="Loading More..."/>
-        </StackLayout>
     </StackLayout>
 </ContentPage>

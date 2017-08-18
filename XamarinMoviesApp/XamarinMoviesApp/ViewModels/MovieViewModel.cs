@@ -15,11 +15,11 @@ namespace XamarinMoviesApp.ViewModels
             set;
         }
 
-		public string BackdropImage
-		{
-			get;
-			set;
-		}
+        public string BackdropImage
+        {
+            get;
+            set;
+        }
 
         public string Genres
         {
@@ -40,9 +40,9 @@ namespace XamarinMoviesApp.ViewModels
         }
 
         public double VoteAverage
-		{
-			get;
-			set;
-		}
+        {
+            get;
+            set;
+        }
     }
 }

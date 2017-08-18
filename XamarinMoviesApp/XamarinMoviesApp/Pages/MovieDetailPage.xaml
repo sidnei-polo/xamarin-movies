@@ -16,18 +16,31 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.ColumnSpan="2"
+                <ContentView BackgroundColor="{StaticResource BackdropBackgroundColor}"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="2">
+                    <Label HorizontalOptions="Center"
+                        Text="Image"
+                        VerticalOptions="Center"/>
+                </ContentView>
+                <Image Aspect="AspectFill"
+                    Grid.ColumnSpan="2"
                     Grid.RowSpan="2"
-                    Aspect="AspectFill"
-                    BackgroundColor="#CFCFCF"
                     Source="{Binding BackdropImage}"/>
-                <Image Grid.Row="1"
+                <ContentView BackgroundColor="{StaticResource PosterBackgroundColor}"
+                    Grid.Row="1"
+                    Grid.RowSpan="2"
+                    Margin="16,8">
+                    <Label HorizontalOptions="Center"
+                        Text="Image"
+                        VerticalOptions="Center"/>
+                </ContentView>
+                <Image Aspect="AspectFill"
+                    Grid.Row="1"
                     Grid.RowSpan="2"
                     Margin="16,8"
-                    WidthRequest="92"
-                    Aspect="AspectFill"
-                    BackgroundColor="#E6E7E7"
-                    Source="{Binding PosterImage}"/>
+                    Source="{Binding PosterImage}"
+                    WidthRequest="92"/>
                 <StackLayout Grid.Column="1"
                     Grid.Row="2">
                     <Label LineBreakMode="TailTruncation"
@@ -38,10 +51,12 @@
                     <Label Text="{Binding ReleaseDate, StringFormat='{0:y}'}"/>
                 </StackLayout>
             </Grid>
-            <views:SessionView Text="Overview"/>
-            <Label Margin="16,0" Text="{Binding Overview}"/>
-            <views:SessionView Text="Genres"/>
-            <Label Margin="16,0,16,16" Text="{Binding Genres}"/>
+            <views:SectionView Text="Overview"/>
+            <Label Margin="16,0"
+                Text="{Binding Overview}"/>
+            <views:SectionView Text="Genres"/>
+            <Label Margin="16,0,16,16"
+                Text="{Binding Genres}"/>
         </StackLayout>
     </ScrollView>
 </ContentPage>

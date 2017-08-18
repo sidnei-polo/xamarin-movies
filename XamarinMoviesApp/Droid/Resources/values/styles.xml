@@ -25,4 +25,10 @@
 	<style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
 		<item name="colorAccent">#FF4081</item>
 	</style>
+	<!--Splash Screen-->
+    <style name="Theme.Splash" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowTitleSize">0dp</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
 </resources>

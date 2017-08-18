@@ -24,7 +24,7 @@ namespace XamarinMoviesApp.Services
             _userDialogsService = DependencyService.Get<IUserDialogsService>();
         }
 
-        public async Task<RequestResult<MoviePage>> GetUpcomingMoviesAsync (int page)
+        public async Task<RequestResult<MoviePage>> GetUpcomingMoviesAsync(int page)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -35,21 +35,22 @@ namespace XamarinMoviesApp.Services
             return await _httpService.Get<MoviePage>(Settings.UpcomingMoviesEndpoint, parameters);
         }
 
-        public async Task<RequestResult<MoviePage>> SearchMoviesAsync (string query, int page)
+        public async Task<RequestResult<MoviePage>> SearchMoviesAsync(string query, int page)
         {
-			var parameters = new Dictionary<string, object>
-			{
+            var parameters = new Dictionary<string, object>
+            {
                 { "api_key", Settings.ApiKey },
                 { "query", query },
-				{ "page", page }
-			};
+                { "page", page }
+            };
 
             return await _httpService.Get<MoviePage>(Settings.SearchMoviesEndpoint, parameters);
         }
 
-        public async Task<RequestResult<MovieGenres>> GetMovieGenresAsync () {
-			var parameters = new Dictionary<string, object>
-			{
+        public async Task<RequestResult<MovieGenres>> GetMovieGenresAsync()
+        {
+            var parameters = new Dictionary<string, object>
+            {
                 { "api_key", Settings.ApiKey }
             };
             return await _httpService.Get<MovieGenres>(Settings.MovieGenresEndpoint, parameters);
@@ -57,12 +58,15 @@ namespace XamarinMoviesApp.Services
 
         public async Task<IList<MovieViewModel>> GetMoviesAsync(int page, string query)
         {
-            if (_movieGenres == null) {
+            if (_movieGenres == null)
+            {
                 var movieGenresResult = await GetMovieGenresAsync();
-                if (!movieGenresResult.IsSuccess) {
-	                if (movieGenresResult.ErrorData.Error == Error.NotConnected){
-	                    _userDialogsService.DisplayAlert(Messages.ErrorLoadingMoviesTitle, movieGenresResult.ErrorData.ErrorMessage);
-	                }
+                if (!movieGenresResult.IsSuccess)
+                {
+                    if (movieGenresResult.ErrorData.Error == Error.NotConnected)
+                    {
+                        _userDialogsService.DisplayAlert(Strings.ErrorLoadingMoviesTitle, movieGenresResult.ErrorData.ErrorMessage);
+                    }
                     return null;
                 }
                 _movieGenres = movieGenresResult.Data.Genres;
@@ -70,21 +74,22 @@ namespace XamarinMoviesApp.Services
 
             var moviesResult = string.IsNullOrEmpty(query) ? await GetUpcomingMoviesAsync(page) : await SearchMoviesAsync(query, page);
 
-			if (!moviesResult.IsSuccess)
-			{
-				if (moviesResult.ErrorData.Error == Error.NotConnected)
-				{
-                    _userDialogsService.DisplayAlert(Messages.ErrorLoadingMoviesTitle, moviesResult.ErrorData.ErrorMessage);
-				}
-				return null;
-			}
+            if (!moviesResult.IsSuccess)
+            {
+                if (moviesResult.ErrorData.Error == Error.NotConnected)
+                {
+                    _userDialogsService.DisplayAlert(Strings.ErrorLoadingMoviesTitle, moviesResult.ErrorData.ErrorMessage);
+                }
+                return null;
+            }
 
             return ConvertToMovieViewModel(moviesResult.Data, _movieGenres).ToList();
         }
 
         private IEnumerable<MovieViewModel> ConvertToMovieViewModel(MoviePage moviePage, IEnumerable<MovieGenre> movieGenres)
         {
-            var movieViewModels = moviePage.Results.Select(e => new MovieViewModel {
+            var movieViewModels = moviePage.Results.Select(e => new MovieViewModel
+            {
                 Title = e.Title,
                 PosterImage = GetPosterImagePath(e.PosterPath, true),
                 BackdropImage = GetPosterImagePath(e.BackdropPath),
@@ -103,9 +108,9 @@ namespace XamarinMoviesApp.Services
             return string.Join("/", genreStrings);
         }
 
-		private string GetPosterImagePath(string imagePath, bool isPoster = false)
-		{
+        private string GetPosterImagePath(string imagePath, bool isPoster = false)
+        {
             return string.Concat(Settings.ImageBaseUrl, isPoster ? Settings.PosterThumbImageMethod : Settings.BackdropImageMethod, imagePath);
-		}
+        }
     }
 }

@@ -2,14 +2,14 @@
 
 namespace XamarinMoviesApp.Views
 {
-	public class SessionView : ContentView
+	public class SectionView : ContentView
 	{
         readonly Label _label;
 
         public static readonly BindableProperty TextProperty = BindableProperty.Create(
 			nameof(Text),
 			typeof(string),
-			typeof(SessionView),
+			typeof(SectionView),
 			string.Empty
 		);
 
@@ -26,7 +26,7 @@ namespace XamarinMoviesApp.Views
 			}
 		}
 
-		public SessionView()
+		public SectionView()
 		{
             var layout = new StackLayout { Spacing = 0 };
 
